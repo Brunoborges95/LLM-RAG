@@ -1,0 +1,39 @@
+<<<<<<< HEAD
+# Use uma imagem base leve com Python
+FROM python:3.11-slim
+
+# Defina o diretório de trabalho
+WORKDIR /app
+
+# Copie os arquivos necessários para o contêiner
+COPY . /app
+
+# Instale as dependências
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Exponha a porta utilizada pelo Streamlit
+EXPOSE 8501
+
+# Comando para executar o aplicativo Streamlit
+CMD streamlit run st_load_llm_chat.py
+
+=======
+# Use uma imagem base leve com Python
+FROM python:3.11-slim
+
+# Defina o diretório de trabalho
+WORKDIR /app
+
+# Copie os arquivos necessários para o contêiner
+COPY . /app
+
+# Instale as dependências
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Exponha a porta utilizada pelo Streamlit
+EXPOSE 8501
+
+# Comando para executar o aplicativo Streamlit
+CMD streamlit run st_load_llm_chat.py
+
+>>>>>>> 2282b81f8c0b72f631c4e26f6a2d9dffe320e6a1
