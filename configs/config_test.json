@@ -1,0 +1,13 @@
+{
+    "config": {
+        "temperature": "0.5",
+        "OCR": "False",
+        "embedding_model": "all-MiniLM-L6-v2",
+        "vector_store": "DocArrayInMemorySearch",
+        "memory": "ConversationBufferMemory",
+        "llm": "ChatOpenAI",
+        "max_tokens_limit": "1000"
+    },
+    "message_template": "Seja direto \n Chat History: {chat_history}",
+    "context_template": "Context: {context}\n"
+}

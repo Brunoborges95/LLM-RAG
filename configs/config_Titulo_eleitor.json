@@ -1,0 +1,12 @@
+{
+    "config": {
+        "temperature": "0",
+        "OCR": "True",
+        "embedding_model": "all-MiniLM-L6-v2",
+        "vector_store": "DocArrayInMemorySearch",
+        "llm": "ChatOpenAI",
+        "memory": "ConversationBufferMemory",
+        "max_tokens_limit": "1000",
+        "extractor": "textract"
+    }
+}
