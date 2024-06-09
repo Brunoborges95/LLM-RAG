@@ -29,15 +29,13 @@ def upload_files():
 
     temp_filepath = data.get("path_selected_filename")
     few_shot_examples = data.get("few_shot_examples")
-    message_template = data.get("message_template")
-    context_template = data.get("context_template")
+    prompt_template = data.get("prompt_template")
 
     # Retornar a resposta em JSON
     response = {
         "path_selected_filename": temp_filepath,
         "few_shot_examples": few_shot_examples,
-        "message_template": message_template,
-        "context_template": context_template,
+        "prompt_template": prompt_template,
     }
     match OCR_flag:
         case "True":
@@ -89,11 +87,11 @@ def upload_files():
         qa_chain = lc.Chain(
             llm, retriever, memory
         ).RetrievalChain_with_few_shot_examples(
-            few_shot_examples, message_template, context_template, max_tokens_limit
+            few_shot_examples, prompt_template, max_tokens_limit
         )
     else:
         qa_chain = lc.Chain(llm, retriever, memory).RetrievalChain_with_prompt(
-            message_template, context_template, max_tokens_limit
+            prompt_template, max_tokens_limit
         )
     app.config["qa_chain"] = qa_chain
     return jsonify(response)
