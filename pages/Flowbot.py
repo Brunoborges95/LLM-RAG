@@ -21,6 +21,14 @@ llm_model = st.sidebar.selectbox("LLM", options=["ChatOpenAI_gpt-3.5-turbo", "Ch
 max_tokens_limit = st.sidebar.slider("Max Tokens Limit", min_value=1, max_value=5000, value=1000)
 few_shot_examples = None 
 
+if st.sidebar.button("Limpar Histórico"):
+    st.session_state.history = []
+    st.session_state.question_index = 0
+    st.session_state.questions = []
+
+
+if st.button("Debug: Session State"):
+    st.write(st.session_state)
 
 prompt = st.text_input("Defina o prompt inicial: ", "")
 bot_name  = st.text_input("Defina o nome do bot: ", "")
@@ -112,8 +120,7 @@ i = st.session_state.question_index
 if st.button("Enter"):
     try:
         part_intro = f"A questão é a introdução do entrevistado. Se introduza também, seu nome é {bot_name}"
-        part_2 = f"""Você como Entrevistador deve reagir à introdução e fazer a pergunta: {perguntas[i]},
-                    podendo usar o contexto para enriquecer a pergunta."""
+
         part_context = " {context}."
         part_answer = f"A questão é a resposta do Entrevistado para a pergunta {perguntas[i-1]} do conjunto de perguntas: {perguntas}."
         part_middle = f"""Você como Entrevistador deve reagir à resposta e fazer a pergunta: {perguntas[i]}, 
@@ -122,7 +129,7 @@ if st.button("Enter"):
                     podendo usar o contexto para enriquecer a pergunta.
                     """
         if i==0:
-            prompt_template = part_intro+part_2+prompt+part_context
+            prompt_template = part_intro+part_middle+prompt+part_context
         if 0<i<len(perguntas)-1:
             prompt_template = part_answer+part_middle+prompt+part_context
         if i==len(perguntas)-1:
@@ -139,10 +146,10 @@ if st.button("Enter"):
                 prompt_template, max_tokens_limit
             )
             bot_response = qa_chain.run(user_query)
-    except NameError as e:
+    except:
         st.session_state.question_index = 0
         i = st.session_state.question_index
-        prompt_template = part_intro+part_2+prompt+part_context
+        prompt_template = part_intro+part_middle+prompt+part_context
         if few_shot_examples is not None:
             qa_chain = lc.Chain(
                 llm, retriever, memory
@@ -162,12 +169,3 @@ if st.button("Enter"):
         st.write(f"**{bot_name} 🤖:** {chat['bot']}")
 st.session_state.question_index += 1
 
-
-if st.sidebar.button("Limpar Histórico"):
-    st.session_state.history = []
-    st.session_state.question_index = 0
-    st.session_state.questions = []
-
-
-if st.button("Debug: Session State"):
-    st.write(st.session_state)

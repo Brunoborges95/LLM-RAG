@@ -21,6 +21,8 @@ llm_model = st.sidebar.selectbox("LLM", options=["ChatOpenAI_gpt-3.5-turbo", "Ch
 max_tokens_limit = st.sidebar.slider("Max Tokens Limit", min_value=1, max_value=5000, value=1000)
 few_shot_examples = None 
 
+if st.sidebar.button("Limpar Histórico"):
+    st.session_state.history = []
 
 prompt_template = st.text_input("Defina o prompt inicial: ", "")
 bot_name  = st.text_input("Defina o nome do bot: ", "")
@@ -120,5 +122,3 @@ if st.button('iniciar'):
         st.write(f"**Você 👨‍💼:** {chat['user']}")
         st.write(f"**{bot_name} 🤖:** {chat['bot']}")
 
-    if st.sidebar.button("Limpar Histórico"):
-        st.session_state.history = []
