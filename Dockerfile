@@ -14,5 +14,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8501
 
 # Comando para executar o aplicativo Streamlit
-CMD streamlit run st_load_llm_chat.py
+CMD streamlit run Chat.py --server.port $PORT
 

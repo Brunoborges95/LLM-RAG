@@ -32,11 +32,9 @@ from sentence_transformers import SentenceTransformer
 import os
 import tempfile
 import boto3
-import tempfile
 
 textract = boto3.client('textract')
 
-os.environ["OPENAI_API_KEY"] = "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"
 
 class EpubReader(UnstructuredEPubLoader):
     def __init__(self, file_path: str | list[str], ** kwargs: Any):

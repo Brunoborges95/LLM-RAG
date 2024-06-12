@@ -2,7 +2,7 @@ import requests # type: ignore
 import json
 
 perguntas = [
-    "1. Olá, qual é o seu nome?",
+    "1. Qual é o seu nome?",
     "2. Pode me falar um pouco sobre sua experiência profissional?",
     "3. Quais são suas principais habilidades?",
     "4. Por que você quer trabalhar conosco?",
