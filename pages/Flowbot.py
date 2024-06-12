@@ -110,36 +110,51 @@ perguntas = st.session_state.questions
 i = st.session_state.question_index
 
 if st.button("Enter"):
-    if i==0:
-        part_1 = f"A questão é a introdução do entrevistado. Se introduza também, seu nome é {bot_name}"
+    try:
+        part_intro = f"A questão é a introdução do entrevistado. Se introduza também, seu nome é {bot_name}"
         part_2 = f"""Você como Entrevistador deve reagir à introdução e fazer a pergunta: {perguntas[i]},
-                podendo usar o contexto para enriquecer a pergunta."""
-        part_3 = " {context}."
-        prompt_template = part_1+part_2+prompt+part_3
-    if 0<i<len(perguntas)-1:
-        part_1 = f"A questão é a resposta do Entrevistado para a pergunta {perguntas[i-1]} do conjunto de perguntas: {perguntas}."
-        part_2 = f"""Você como Entrevistador deve reagir à resposta e fazer a pergunta: {perguntas[i]}, 
-                podendo usar o contexto para enriquecer a pergunta."""
-        part_3 = " {context}."
-        prompt_template = part_1+part_2+prompt+part_3
-    if i==len(perguntas)-1:
-        part_1 = f"A questão é a resposta do Entrevistado para a pergunta {perguntas[i-1]} do conjunto de perguntas: {perguntas}."
-        part_2 = f"""Você como Entrevistador deve reagir deve reagir à resposta e finalizar a entrevista,
-                podendo usar o contexto para enriquecer a pergunta.
-                """
-        part_3 = " {context}."
-        prompt_template = part_1+part_2+prompt+part_3
-    if few_shot_examples is not None:
-        qa_chain = lc.Chain(
-            llm, retriever, memory
-        ).RetrievalChain_with_few_shot_examples(
-            few_shot_examples, prompt_template, max_tokens_limit
-        )
-    else:
-        qa_chain = lc.Chain(llm, retriever, memory).RetrievalChain_with_prompt(
-            prompt_template, max_tokens_limit
-        )
-        bot_response = qa_chain.run(user_query)
+                    podendo usar o contexto para enriquecer a pergunta."""
+        part_context = " {context}."
+        part_answer = f"A questão é a resposta do Entrevistado para a pergunta {perguntas[i-1]} do conjunto de perguntas: {perguntas}."
+        part_middle = f"""Você como Entrevistador deve reagir à resposta e fazer a pergunta: {perguntas[i]}, 
+                    podendo usar o contexto para enriquecer a pergunta."""
+        part_finish = f"""Você como Entrevistador deve reagir deve reagir à resposta e finalizar a entrevista,
+                    podendo usar o contexto para enriquecer a pergunta.
+                    """
+        if i==0:
+            prompt_template = part_intro+part_2+prompt+part_context
+        if 0<i<len(perguntas)-1:
+            prompt_template = part_answer+part_middle+prompt+part_context
+        if i==len(perguntas)-1:
+            prompt_template = part_answer+part_finish+prompt+part_context
+
+        if few_shot_examples is not None:
+            qa_chain = lc.Chain(
+                llm, retriever, memory
+            ).RetrievalChain_with_few_shot_examples(
+                few_shot_examples, prompt_template, max_tokens_limit
+            )
+        else:
+            qa_chain = lc.Chain(llm, retriever, memory).RetrievalChain_with_prompt(
+                prompt_template, max_tokens_limit
+            )
+            bot_response = qa_chain.run(user_query)
+    except NameError as e:
+        st.session_state.question_index = 0
+        i = st.session_state.question_index
+        prompt_template = part_intro+part_2+prompt+part_context
+        if few_shot_examples is not None:
+            qa_chain = lc.Chain(
+                llm, retriever, memory
+            ).RetrievalChain_with_few_shot_examples(
+                few_shot_examples, prompt_template, max_tokens_limit
+            )
+        else:
+            qa_chain = lc.Chain(llm, retriever, memory).RetrievalChain_with_prompt(
+                prompt_template, max_tokens_limit
+            )
+            bot_response = qa_chain.run(user_query)
+
     add_message(user_query, bot_response)
     st.write("### Histórico da Conversa")
     for chat in st.session_state.history:
@@ -148,7 +163,7 @@ if st.button("Enter"):
 st.session_state.question_index += 1
 
 
-if st.button("Limpar Histórico"):
+if st.sidebar.button("Limpar Histórico"):
     st.session_state.history = []
     st.session_state.question_index = 0
     st.session_state.questions = []

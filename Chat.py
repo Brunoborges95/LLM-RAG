@@ -120,5 +120,5 @@ if st.button('iniciar'):
         st.write(f"**Você 👨‍💼:** {chat['user']}")
         st.write(f"**{bot_name} 🤖:** {chat['bot']}")
 
-    if st.button("Limpar Histórico"):
+    if st.sidebar.button("Limpar Histórico"):
         st.session_state.history = []
