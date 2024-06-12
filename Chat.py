@@ -15,7 +15,7 @@ temperature = st.sidebar.slider("Temperature", min_value=0.0, max_value=1.0, val
 OCR_flag = st.sidebar.checkbox("OCR", value=False)
 extractor = st.sidebar.selectbox("Text Extractor Model", options=["textract"], index=0)
 embedding_model = st.sidebar.selectbox("Embedding Model", options=["all-MiniLM-L6-v2", "other-model"], index=0)
-vector_store_model = st.sidebar.selectbox("Vector Store", options=["DocArrayInMemorySearch", "other-store"], index=0)
+vector_store_model = st.sidebar.selectbox("Vector Store", options=["FAISS", "DocArrayInMemorySearch",  "Pinecone"], index=0)
 memory_model = st.sidebar.selectbox("Memory", options=["ConversationBufferMemory", "other-memory"], index=0)
 llm_model = st.sidebar.selectbox("LLM", options=["ChatOpenAI_gpt-3.5-turbo", "ChatOpenAI_gpt-4o", "ChatOpenAI_gpt-4"], index=0)
 max_tokens_limit = st.sidebar.slider("Max Tokens Limit", min_value=1, max_value=5000, value=1000)
@@ -45,11 +45,17 @@ match extractor:
     case "textract":
         extractor = el.Extract().textract
 
-uploaded_files = st.sidebar.file_uploader(
-    label="Upload files",
-    #type=list(DocumentLoader.supported_extentions.keys()),
-    accept_multiple_files=True
-    )
+@st.cache_resource(experimental_allow_widgets=True)
+def load_data():
+    uploaded_files = st.sidebar.file_uploader(
+        label="Upload files",
+        #type=list(DocumentLoader.supported_extentions.keys()),
+        accept_multiple_files=True
+        )
+    return uploaded_files
+
+uploaded_files = load_data()
+
 if st.button('iniciar'):
     docs = []
     temp_dir = tempfile.TemporaryDirectory()
