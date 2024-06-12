@@ -24,8 +24,10 @@ few_shot_examples = None
 if st.sidebar.button("Limpar Histórico"):
     st.session_state.history = []
 
-prompt_template = st.text_input("Defina o prompt inicial: ", "")
 bot_name  = st.text_input("Defina o nome do bot: ", "")
+prompt = st.text_input("Defina o prompt inicial: ", "")
+prompt_template = prompt + "Contexto: {context}" 
+
 
 
 if 'history' not in st.session_state:

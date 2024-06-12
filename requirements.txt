@@ -12,3 +12,4 @@ pypdf==4.1.0
 pydantic==1.10.9
 boto3
 tiktoken
+faiss-cpu
