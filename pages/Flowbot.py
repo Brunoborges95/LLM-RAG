@@ -149,6 +149,14 @@ if st.button("Enter"):
     except:
         st.session_state.question_index = 0
         i = st.session_state.question_index
+        part_intro = f"A questão é a introdução do entrevistado. Se introduza também, seu nome é {bot_name}"
+        part_context = " {context}."
+        part_answer = f"A questão é a resposta do Entrevistado para a pergunta {perguntas[i-1]} do conjunto de perguntas: {perguntas}."
+        part_middle = f"""Você como Entrevistador deve reagir à resposta e fazer a pergunta: {perguntas[i]}, 
+                    podendo usar o contexto para enriquecer a pergunta."""
+        part_finish = f"""Você como Entrevistador deve reagir deve reagir à resposta e finalizar a entrevista,
+                    podendo usar o contexto para enriquecer a pergunta.
+                    """
         prompt_template = part_intro+part_middle+prompt+part_context
         if few_shot_examples is not None:
             qa_chain = lc.Chain(
