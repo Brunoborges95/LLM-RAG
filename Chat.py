@@ -44,7 +44,7 @@ match OCR_flag:
 match extractor:
     case "textract":
         extractor = el.Extract().textract
-
+# add
 @st.cache_resource(experimental_allow_widgets=True)
 def load_data():
     uploaded_files = st.sidebar.file_uploader(
