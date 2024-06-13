@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Instale as dependências
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Exponha a porta utilizada pelo Streamlit
 EXPOSE 8501
